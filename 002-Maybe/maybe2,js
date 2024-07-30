@@ -1,0 +1,42 @@
+class Maybe {
+  constructor(value) {
+    this.value = value;
+  }
+
+  static of(value) {
+    return new Maybe(value);
+  }
+
+  isNothing() {
+    return this.value === null || this.value === undefined;
+  }
+
+  map(fn) {
+    return this.isNothing() ? this : Maybe.of(fn(this.value));
+  }
+
+  flatMap(fn) {
+    return this.isNothing() ? this : fn(this.value);
+  }
+
+  getOrElse(defaultValue) {
+    return this.isNothing() ? defaultValue : this.value;
+  }
+}
+
+// Example of using the Maybe monad
+const maybeValue = Maybe.of(2);
+const result = maybeValue
+  .map((x) => x + 2)
+  .flatMap((x) => Maybe.of(x * 3))
+  .getOrElse(0);
+
+console.log(result);
+
+const maybeNull = Maybe.of(null);
+const resultWithNull = maybeNull
+  .map((x) => x + 2)
+  .flatMap((x) => Maybe.of(x * 3))
+  .getOrElse(0);
+
+console.log(resultWithNull);
